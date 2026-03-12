@@ -7,4 +7,11 @@
     <string name="dial_label_button">Позвонить другу</string>
     <string name="share_label_button">Поделиться текстом</string>
     <string name="second_activity">Это вторая Activity</string>
+    <string name="icon_label">Логотип приложения</string>
+    <string name="install">Установить</string>
+    <string name="app_details_description">Описание приложения</string>
+    <string name="app_details_age">Возраст</string>
+    <string name="app_details_size">Размер</string>
+    <string name="app_details_developer">Разработчик</string>
+    <string name="app_details_screenshots">Скриншоты</string>
 </resources>

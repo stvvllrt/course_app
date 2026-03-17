@@ -1,5 +1,6 @@
 package ru.stvvllrt.course_app
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -25,8 +26,13 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +43,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.stvvllrt.course_app.ui.theme.Course_appTheme
 import coil.compose.AsyncImage
 import coil.decode.SvgDecoder
@@ -46,6 +53,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.NavType
+import ru.stvvllrt.course_app.presentation.AppListViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,11 +73,21 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MainScreen() {
+fun MainScreen(viewModel: AppListViewModel = viewModel()) {
     val navController = rememberNavController()
+    val apps = Data.appList
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    NavHost(navController = navController, startDestination = "catalog") {
+    LaunchedEffect(Unit) {
+        viewModel.snackbarEvents.collect { message ->
+            snackbarHostState.showSnackbar(message)
+        }
+    }
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+    ) { NavHost(navController = navController, startDestination = "catalog") {
         composable("catalog") {
             Column(
                 modifier = Modifier
@@ -78,8 +96,8 @@ fun MainScreen() {
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                AppHeader()
-                CathalogColumn(navController)
+                AppHeader(onLogoClick = { viewModel.onLogoClick() })
+                CathalogColumn(navController,apps)
             }
         }
 
@@ -88,7 +106,7 @@ fun MainScreen() {
             arguments = listOf(navArgument("appName") { type = NavType.StringType })
         ) { backStackEntry ->
             val appName = backStackEntry.arguments?.getString("appName")
-            val app = Data.appList.find { it.name == appName }
+            val app = viewModel.getAppByName(appName)
             if (app != null) {
                 AppDetailsContent(
                     content = app,
@@ -106,18 +124,21 @@ fun MainScreen() {
             }
         }
     }
+    }
 }
 @Composable
-fun CathalogColumn(navController: androidx.navigation.NavController) {
+fun CathalogColumn(
+    navController: androidx.navigation.NavController,
+                   apps: List<Data.Apps>) {
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(topStart =28.dp, topEnd = 28.dp))
+            .clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp))
             .background(color = MaterialTheme.colorScheme.surface)
             .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(Data.appList) { app ->
+        items(apps) { app ->
             AppRowCard(
                 app = app,
                 onClick = {
@@ -133,7 +154,7 @@ fun CathalogColumn(navController: androidx.navigation.NavController) {
     }
 }
 @Composable
-fun AppHeader(){
+fun AppHeader(onLogoClick: () -> Unit){
     Row(modifier = Modifier
         .background(color = MaterialTheme.colorScheme.primary)
         .fillMaxWidth()
@@ -145,7 +166,8 @@ fun AppHeader(){
             contentDescription = "RS Logo" ,
             modifier = Modifier
                 .height(55.dp)
-                .padding(10.dp),
+                .padding(10.dp)
+                .clickable { onLogoClick() }
         )
         CathalogButton(onClick = {})
         }

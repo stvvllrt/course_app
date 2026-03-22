@@ -14,4 +14,10 @@
     <string name="app_details_size">Размер</string>
     <string name="app_details_developer">Разработчик</string>
     <string name="app_details_screenshots">Скриншоты</string>
+    <string name="app_details_read_more">Подробнее\n</string>
+    <string name="app_details_error_refresh">Ошибка обновления</string>
+    <string name="app_details_error">Ошибка\n</string>
+    <string name="category_app">Инструменты\n</string>
+    <string name="category_game">Развлечения</string>
+    <string name="under_development">В разработке\n</string>
 </resources>

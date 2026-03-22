@@ -1,4 +1,4 @@
-package ru.stvvllrt.course_app
+package ru.stvvllrt.course_app.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -7,29 +7,26 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import ru.stvvllrt.course_app.presentation.theme.Course_appTheme
+import ru.stvvllrt.course_app.presentation.applist.MainScreen
 
-class SideActivity : ComponentActivity() {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val text = intent.getStringExtra("text") ?: ""
         enableEdgeToEdge()
         setContent {
             Course_appTheme {
-                Column(modifier = Modifier.fillMaxSize(),verticalArrangement = Arrangement.Center,horizontalAlignment = Alignment.CenterHorizontally){
-                    SideScreen(text)
+                Column(modifier = Modifier
+                    .fillMaxSize()
+                    .statusBarsPadding(),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally){
+                    MainScreen()
                 }
             }
         }
     }
-}
-
-@Composable
-fun SideScreen(text: String){
-    Text(R.string.second_activity.toString())
-    Text(text="Ваш текст: $text")
 }

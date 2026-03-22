@@ -1,6 +1,5 @@
-package ru.stvvllrt.course_app.ui.theme
+package ru.stvvllrt.course_app.presentation.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

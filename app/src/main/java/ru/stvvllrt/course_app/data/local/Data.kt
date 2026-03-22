@@ -1,11 +1,13 @@
-package ru.stvvllrt.course_app
+package ru.stvvllrt.course_app.data.local
+
+import ru.stvvllrt.course_app.domain.appdetails.Category
 
 object Data {
     data class Apps(
+        val name: String,
+        val category: String,
         val icon: String,
-        val name: String, 
         val description: String,
-        val category: String
     )
 
     const val RuStoreIcon = "https://static.rustore.ru/rustore-strapi/6/logo_color_30_px_2_fa2039288f.svg"

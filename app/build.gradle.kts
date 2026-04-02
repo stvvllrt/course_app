@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -38,7 +40,13 @@ android {
 }
 
 dependencies {
-    implementation("androidx.navigation:navigation-compose:2.9.7")
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation("com.squareup.okhttp3:logging-interceptor:5.3.2")
+    implementation(libs.hilt)
+    ksp(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -54,9 +62,9 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-    implementation("io.coil-kt:coil-compose:2.7.0")
-    implementation("io.coil-kt:coil-svg:2.5.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.4")
+    implementation(libs.coil.compose)
+    implementation(libs.coil.svg)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
 
 }

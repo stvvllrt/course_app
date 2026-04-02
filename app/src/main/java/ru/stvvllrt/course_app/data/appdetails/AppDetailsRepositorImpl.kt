@@ -12,4 +12,10 @@ class AppDetailsRepositoryImpl : AppDetailsRepository {
         val domain = mapper.toDomain(dto)
         return domain
     }
+    /*
+    override suspend fun getDetails(id: String): AppDetailsDomainModel {
+        val dto = api.getAppDetails(id)
+        return mapper.toDomain(dto)
+    }
+     */
 }

@@ -1,15 +1,9 @@
 package ru.stvvllrt.course_app.domain.applist
 
-import ru.stvvllrt.course_app.domain.appdetails.AppDetails
-import ru.stvvllrt.course_app.domain.appdetails.AppDetailsRepository
-import ru.stvvllrt.course_app.domain.appdetails.Category
+import javax.inject.Inject
 
-class GetAppListUseCase(
-    private val appListRepository: AppListRepository,
+class GetAppListUseCase @Inject constructor(
+    private val repository: AppListRepository
 ) {
-    suspend operator fun invoke(): List<AppList> {
-        val app: List<AppList> = appListRepository.get()
-
-        return app
-    }
+    suspend operator fun invoke(): List<AppList> = repository.getAppList()
 }

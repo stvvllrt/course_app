@@ -1,8 +1,9 @@
 package ru.stvvllrt.course_app.presentation.applist
 
 import ru.stvvllrt.course_app.domain.applist.AppList
+import javax.inject.Inject
 
-class AppListDomainToUiMapper {
+class AppListDomainToUiMapper @Inject constructor(){
     fun map(domain: AppList): AppListEntry {
         return AppListEntry(
             name = domain.name,

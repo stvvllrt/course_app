@@ -1,8 +1,10 @@
 package ru.stvvllrt.course_app.presentation.appdetails
 
+import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ru.stvvllrt.course_app.domain.appdetails.GetAppDetailsUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,24 +12,42 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.stvvllrt.course_app.data.appdetails.AppDetailsRepositoryImpl
+import ru.stvvllrt.course_app.domain.appdetails.GetAppDetailsUseCase
+import javax.inject.Inject
 
-class AppDetailsViewModel : ViewModel() {
-
-    private val getAppDetailsUseCase = GetAppDetailsUseCase(
-        // Подстановку реализации должен делать DI.
-        // Будет доработано в следующих лекциях.
-        appDetailsRepository = AppDetailsRepositoryImpl(),
-    )
-
-    private val _state = MutableStateFlow<AppDetailsState>(AppDetailsState.Loading)
-    val state = _state.asStateFlow()
+@HiltViewModel
+class AppDetailsViewModel @Inject constructor(
+    private val getAppDetailsUseCase: GetAppDetailsUseCase,
+    savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
     private val _events = Channel<AppDetailsEvent>(BUFFERED)
     val events = _events.receiveAsFlow()
 
+    private val _state = MutableStateFlow<AppDetailsState>(AppDetailsState.Loading)
+    val state = _state.asStateFlow()
+
     init {
-        getAppDetails()
+        val appId: String? = savedStateHandle["appId"]
+        if (appId != null) {
+            viewModelScope.launch {
+                _state.value = AppDetailsState.Loading
+
+                runCatching {
+                    getAppDetailsUseCase(appId)
+                }.onSuccess { data ->
+                    _state.value = AppDetailsState.Content(
+                        appDetails = data,
+                        descriptionCollapsed = true
+                    )
+                }.onFailure {
+                    Log.e("AppDetailsViewModel", "Error loading app details")
+                    _state.value = AppDetailsState.Error
+                }
+            }
+        } else {
+            _state.value = AppDetailsState.Error
+        }
     }
 
     fun showUnderDevelopmentMessage() {
@@ -39,26 +59,9 @@ class AppDetailsViewModel : ViewModel() {
     fun collapseDescription() {
         _state.update { currentState ->
             if (currentState is AppDetailsState.Content) {
-                currentState.copy(descriptionCollapsed = true)
+                currentState.copy(descriptionCollapsed = !currentState.descriptionCollapsed)
             } else {
                 currentState
-            }
-        }
-    }
-
-    fun getAppDetails() {
-        viewModelScope.launch {
-            _state.value = AppDetailsState.Loading
-
-            runCatching {
-                val appDetails = getAppDetailsUseCase()
-
-                _state.value = AppDetailsState.Content(
-                    appDetails = appDetails,
-                    descriptionCollapsed = false,
-                )
-            }.onFailure {
-                _state.value = AppDetailsState.Error
             }
         }
     }

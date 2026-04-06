@@ -1,5 +1,6 @@
 package ru.stvvllrt.course_app.data.applist
 
+import ru.stvvllrt.course_app.domain.appdetails.AppDetails
 import ru.stvvllrt.course_app.domain.applist.AppListRepository
 import ru.stvvllrt.course_app.domain.applist.AppList
 import javax.inject.Inject
@@ -18,4 +19,5 @@ class AppListRepositoryImpl @Inject constructor(
             )
         }
     }
+
 }

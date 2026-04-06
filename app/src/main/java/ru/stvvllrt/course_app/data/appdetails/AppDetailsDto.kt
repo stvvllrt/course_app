@@ -1,18 +1,6 @@
 package ru.stvvllrt.course_app.data.appdetails
+import com.google.gson.annotations.SerializedName
 
-import ru.stvvllrt.course_app.domain.appdetails.Category
-
-data class AppDetailsDto(
-    val name: String,
-    val developer: String,
-    val category: Category,
-    val ageRating: Int,
-    val size: Double,
-    val icon: String,
-    val screenshots: List<String>,
-    val description: String,
-)
-/*
 data class AppDetailsDto(
     @SerializedName("id") val id: String,
     @SerializedName("name") val name: String,
@@ -24,4 +12,3 @@ data class AppDetailsDto(
     @SerializedName("screenshotUrlList") val screenshots: List<String>,
     @SerializedName("description") val description: String
 )
- */

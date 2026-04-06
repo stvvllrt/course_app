@@ -23,7 +23,7 @@ import ru.stvvllrt.course_app.presentation.theme.Course_appTheme
 
 @Composable
 fun ScreenshotsList(
-    screenshotUrlList: List<String>,
+    screenshotUrlList: List<String>?,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
@@ -37,10 +37,10 @@ fun ScreenshotsList(
             modifier = Modifier.fillMaxWidth(),
             contentPadding = contentPadding,
             pageSpacing = 8.dp,
-            state = rememberPagerState { screenshotUrlList.size },
+            state = rememberPagerState { screenshotUrlList?.size ?: 0 },
         ) { index ->
             AsyncImage(
-                model = screenshotUrlList[index],
+                model = screenshotUrlList?.get(index),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()

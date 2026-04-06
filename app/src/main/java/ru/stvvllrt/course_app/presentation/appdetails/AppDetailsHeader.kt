@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import ru.stvvllrt.course_app.R
 import ru.stvvllrt.course_app.domain.appdetails.AppDetails
-import ru.stvvllrt.course_app.domain.appdetails.Category
 import ru.stvvllrt.course_app.presentation.theme.Course_appTheme
 import kotlin.math.roundToInt
 
@@ -49,7 +48,7 @@ fun AppDetailsHeader(
         Spacer(Modifier.width(16.dp))
         Column {
             Text(
-                text = getCategoryText(appDetails.category),
+                text = appDetails.category,
                 color = MaterialTheme.colorScheme.secondary,
                 fontSize = 12.sp,
             )
@@ -86,34 +85,4 @@ fun AppDetailsHeader(
     }
 }
 
-// Статичные строки, которые не приходят из бэкенда
-// нужно хранить в ресурсах (strings.xml).
-@Composable
-private fun getCategoryText(category: Category): String = when (category) {
-    Category.APP -> stringResource(R.string.category_app)
-    Category.GAME -> stringResource(R.string.category_game)
-}
 
-@Preview
-@Composable
-private fun Preview() {
-    val appDetails = AppDetails(
-        name = "Гильдия Героев: Экшен ММО РПГ",
-        developer = "VK Play",
-        category = Category.GAME,
-        ageRating = 12,
-        size = 223.7f,
-        screenshotUrlList = listOf(
-            "https://static.rustore.ru/imgproxy/-y8kd-4B6MQ-1OKbAbnoAIMZAzvoMMG9dSiHMpFaTBc/preset:web_scr_lnd_335/plain/https://static.rustore.ru/apk/393868735/content/SCREENSHOT/dfd33017-e90d-4990-aa8c-6f159d546788.jpg@webp",
-            "https://static.rustore.ru/imgproxy/dZCvNtRKKFpzOmGlTxLszUPmwi661IhXynYZGsJQvLw/preset:web_scr_lnd_335/plain/https://static.rustore.ru/apk/393868735/content/SCREENSHOT/60ec4cbc-dcf6-4e69-aa6f-cc2da7de1af6.jpg@webp",
-            "https://static.rustore.ru/imgproxy/g5whSI1uNqaL2TUO7TFfM8M63vXpWXNCm2vlX4Ahvc4/preset:web_scr_lnd_335/plain/https://static.rustore.ru/apk/393868735/content/SCREENSHOT/c2dde8bc-c4ab-482a-80a5-2789149f598d.jpg@webp",
-            "https://static.rustore.ru/imgproxy/TjeurtC7BczOVJt74XhjGYuQnG1l4rx6zpDqyMb00GY/preset:web_scr_lnd_335/plain/https://static.rustore.ru/apk/393868735/content/SCREENSHOT/08318f76-7a9c-43aa-b4a7-1aa878d00861.jpg@webp",
-        ),
-        iconUrl = "https://static.rustore.ru/imgproxy/APsbtHxkVa4MZ0DXjnIkSwFQ_KVIcqHK9o3gHY6pvOQ/preset:web_app_icon_62/plain/https://static.rustore.ru/apk/393868735/content/ICON/3f605e3e-f5b3-434c-af4d-77bc5f38820e.png@webp",
-        description = "Легендарный рейд героев в Фэнтези РПГ. Станьте героем гильдии и зразите мастера подземелья!"
-
-    )
-    Course_appTheme {
-        AppDetailsHeader(appDetails = appDetails, modifier = Modifier.fillMaxWidth())
-    }
-}

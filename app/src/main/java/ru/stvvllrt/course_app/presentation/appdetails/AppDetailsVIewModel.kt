@@ -9,6 +9,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.Channel.Factory.BUFFERED
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -27,26 +28,51 @@ class AppDetailsViewModel @Inject constructor(
     private val _state = MutableStateFlow<AppDetailsState>(AppDetailsState.Loading)
     val state = _state.asStateFlow()
 
-    init {
-        val appId: String? = savedStateHandle["appId"]
-        if (appId != null) {
-            viewModelScope.launch {
-                _state.value = AppDetailsState.Loading
+    private val appId: String? = savedStateHandle["appId"]
 
-                runCatching {
-                    getAppDetailsUseCase(appId)
-                }.onSuccess { data ->
-                    _state.value = AppDetailsState.Content(
-                        appDetails = data,
-                        descriptionCollapsed = true
-                    )
-                }.onFailure {
-                    Log.e("AppDetailsViewModel", "Error loading app details")
-                    _state.value = AppDetailsState.Error
-                }
-            }
+    init {
+        if (appId != null) {
+            observeAppDetails(appId)
+            loadAppDetails(appId)
         } else {
             _state.value = AppDetailsState.Error
+        }
+    }
+
+    private fun observeAppDetails(id: String) {
+        viewModelScope.launch {
+            getAppDetailsUseCase.observeAppDetails(id)
+                .catch { _state.value = AppDetailsState.Error }
+                .collect { appDetails ->
+                    _state.update { currentState ->
+                        val collapsed = (currentState as? AppDetailsState.Content)
+                            ?.descriptionCollapsed
+                            ?: true
+                        AppDetailsState.Content(
+                            appDetails = appDetails,
+                            descriptionCollapsed = collapsed,
+                            isInWishlist = appDetails.isInWishlist,
+                        )
+                    }
+                }
+        }
+    }
+
+    private fun loadAppDetails(id: String) {
+        viewModelScope.launch {
+            runCatching {
+                getAppDetailsUseCase(id)
+            }.onFailure {
+                Log.e("AppDetailsViewModel", "Error loading app details", it)
+                _state.value = AppDetailsState.Error
+            }
+        }
+    }
+
+    fun toggleWishlist() {
+        val id = appId ?: return
+        viewModelScope.launch {
+            getAppDetailsUseCase.toggleWishlist(id)
         }
     }
 

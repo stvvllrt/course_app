@@ -20,6 +20,7 @@ fun AppDetailsContent(
     onInstallClick: () -> Unit,
     onReadMoreClick: () -> Unit,
     onDeveloperClick: () -> Unit,
+    onWishlistClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val appDetails = content.appDetails
@@ -29,6 +30,8 @@ fun AppDetailsContent(
         Toolbar(
             onBackClick = onBackClick,
             onShareClick = onShareClick,
+            isInWishlist = content.isInWishlist,
+            onWishlistClick = onWishlistClick,
         )
         Spacer(Modifier.height(8.dp))
         AppDetailsHeader(

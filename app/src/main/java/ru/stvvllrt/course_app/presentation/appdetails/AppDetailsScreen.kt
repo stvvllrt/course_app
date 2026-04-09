@@ -77,6 +77,9 @@ fun AppDetailsScreen(viewModel: AppDetailsViewModel = hiltViewModel()) {
                     onDeveloperClick = {
                         viewModel.showUnderDevelopmentMessage()
                     },
+                    onWishlistClick = {
+                        viewModel.toggleWishlist()
+                    },
                     modifier = Modifier
                         .fillMaxSize()
                         .safeDrawingPadding()

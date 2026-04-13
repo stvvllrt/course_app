@@ -1,7 +1,5 @@
 package ru.stvvllrt.course_app.data.local
 
-import ru.stvvllrt.course_app.domain.appdetails.Category
-
 object Data {
     data class Apps(
         val name: String,

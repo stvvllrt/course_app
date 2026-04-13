@@ -71,13 +71,10 @@ fun MainScreen(viewModel: AppListViewModel = hiltViewModel()) {
                     }
 
                     composable(
-                        route = "details/{appName}",
-                        arguments = listOf(navArgument("appName") { type = NavType.StringType })
-                    ) { backStackEntry ->
-                        val appName = backStackEntry.arguments?.getString("appName")
-                        if (appName != null) {
-                            AppDetailsScreen()
-                        }
+                        route = "details/{appId}",
+                        arguments = listOf(navArgument("appId") { type = NavType.StringType })
+                    ) {
+                        AppDetailsScreen()
                     }
                 }
             }

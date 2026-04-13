@@ -7,6 +7,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
 import ru.stvvllrt.course_app.data.applist.AppListApi
 import javax.inject.Singleton
 

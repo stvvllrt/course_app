@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -18,6 +20,8 @@ import ru.stvvllrt.course_app.presentation.theme.Course_appTheme
 internal fun Toolbar(
     onBackClick: () -> Unit,
     onShareClick: () -> Unit,
+    isInWishlist: Boolean,
+    onWishlistClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -32,12 +36,25 @@ internal fun Toolbar(
                 tint = MaterialTheme.colorScheme.primary,
             )
         }
-        IconButton(onClick = onShareClick) {
-            Icon(
-                imageVector = Icons.Default.Share,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-            )
+        Row {
+            IconButton(onClick = onWishlistClick) {
+                Icon(
+                    imageVector = if (isInWishlist) {
+                        Icons.Default.Favorite
+                    } else {
+                        Icons.Default.FavoriteBorder
+                    },
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+            }
+            IconButton(onClick = onShareClick) {
+                Icon(
+                    imageVector = Icons.Default.Share,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+            }
         }
     }
 }
@@ -49,6 +66,8 @@ private fun Preview() {
         Toolbar(
             onBackClick = {},
             onShareClick = {},
+            isInWishlist = false,
+            onWishlistClick = {},
         )
     }
 }

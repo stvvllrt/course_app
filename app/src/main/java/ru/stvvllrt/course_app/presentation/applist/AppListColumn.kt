@@ -32,7 +32,7 @@ fun CathalogColumn(
             AppListRow(
                 app = app,
                 onClick = {
-                    navController.navigate("details/${app.name}")
+                    navController.navigate("details/${app.id}")
                 }
             )
             HorizontalDivider(

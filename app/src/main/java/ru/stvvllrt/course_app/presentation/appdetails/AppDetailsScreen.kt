@@ -15,14 +15,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.stvvllrt.course_app.R
 import kotlinx.coroutines.flow.Flow
 import ru.stvvllrt.course_app.presentation.components.AppDetailsLoading
 
 @Composable
-fun AppDetailsScreen() {
-    val viewModel = viewModel<AppDetailsViewModel>()
+fun AppDetailsScreen(viewModel: AppDetailsViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsState()
     val events = viewModel.events
 
@@ -51,7 +51,7 @@ fun AppDetailsScreen() {
 
             is AppDetailsState.Error -> {
                 AppDetailsError(
-                    onRefreshClick = { viewModel.getAppDetails() },
+                    onRefreshClick = { /* ---- */ },
                     modifier = Modifier
                         .fillMaxSize()
                         .safeDrawingPadding()
@@ -63,7 +63,6 @@ fun AppDetailsScreen() {
                 AppDetailsContent(
                     content = currentState,
                     onBackClick = {
-                        // TODO: Открыть предыдущий экран через Jetpack Navigation
                         viewModel.showUnderDevelopmentMessage()
                     },
                     onShareClick = {
@@ -77,6 +76,9 @@ fun AppDetailsScreen() {
                     },
                     onDeveloperClick = {
                         viewModel.showUnderDevelopmentMessage()
+                    },
+                    onWishlistClick = {
+                        viewModel.toggleWishlist()
                     },
                     modifier = Modifier
                         .fillMaxSize()
